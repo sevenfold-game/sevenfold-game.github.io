@@ -1691,7 +1691,8 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
       return '<div class="res"><div class="n">' + fmtT(r.target) + '</div><div class="e">' + (r.ok ? esc(r.text) : '<span>no score</span>') + '</div><div class="p">' + r.pts + '</div>' +
         '<div class="tcell">' + (r.ok ? tierPill(r.tier) : '<span class="tier" data-t="0" style="opacity:.5">missed</span>') + '</div></div>';
     }).join('');
-    var squares = S.results.map(function (r) { return r.ok ? `${SQUARES[r.tier]} ${r.tier}\n` : '⬛ No answer\n'; }).join('');
+    var tiers = {0:"common", 1:"uncommon", 2:"rare", 3:"obscure", 4:"legendary", 5:"mythic", 6:"unheard", 7:"unforeseen", 8:"bro tried", -1:"no answer"}
+    var squares = S.results.map(function (r) { return r.ok ? `${SQUARES[r.tier]} ${tiers[r.tier]}\n` : '⬛ no answer\n'; }).join('');
     var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' - overall: ' + TIERS[ov][0] : '') + '\n' + squares + '\nhttps://sevenfold-game.github.io';
     app.innerHTML = mast() + pips() +
       '<div class="card"><h2>Today\'s score</h2><div class="pts"><span id="tot">' + (fresh ? 0 : total) + '</span><small>points</small></div>' +
