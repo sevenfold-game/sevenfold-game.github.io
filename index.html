@@ -1350,7 +1350,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
         g.font = '600 26px ' + MONO; g.fillStyle = r.ok ? (r.tier === 7 ? '#FFFFFF' : CARD_TIER[r.tier]) : '#5B6676'; g.fillText(r.ok ? TIERS[r.tier][0] : 'missed', 420, y + 40);
         g.font = '600 40px ' + MONO; g.fillStyle = r.ok ? '#EDF0F5' : '#5B6676'; g.textAlign = 'right'; g.fillText(String(r.pts), W - 72, y + 42); g.textAlign = 'left';
       });
-      g.font = '400 24px ' + MONO; g.fillStyle = '#6E7A8B'; g.fillText('seven numbers, sixty seconds.', 72, Hh - 56);
+      g.font = '400 24px ' + MONO; g.fillStyle = '#6E7A8B'; g.fillText('sevenfold-game.github.io', 72, Hh - 56);
       return new Promise(function (res) { cv.toBlob(function (b) { res({ blob: b, url: cv.toDataURL('image/png') }); }, 'image/png'); });
     });
   }
@@ -1685,7 +1685,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
         '<div class="tcell">' + (r.ok ? tierPill(r.tier) : '<span class="tier" data-t="0" style="opacity:.5">missed</span>') + '</div></div>';
     }).join('');
     var squares = S.results.map(function (r) { return r.ok ? SQUARES[r.tier] : '⬛'; }).join('');
-    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' · overall: ' + TIERS[ov][0] : '') + '\n' + squares;
+    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' · overall: ' + TIERS[ov][0] : '') + '\n' + squares + '\nhttps://sevenfold-game.github.io/';
     app.innerHTML = mast() + pips() +
       '<div class="card"><h2>Today\'s score</h2><div class="pts"><span id="tot">' + (fresh ? 0 : total) + '</span><small>points</small></div>' +
       '<div class="overall"><div class="lab">Overall tier</div><div id="ovslot">' + (fresh ? '' : (ov >= 0 ? tierPill(ov, true) : '')) + '</div>' +
