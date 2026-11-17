@@ -828,9 +828,15 @@ function reduceToTarget(tree, target) {
 
 // "Bro tried": a complex expression with an ugly literal tacked on so it lands on the target.
 // Ugly = a decimal with 3+ places, or (in a sum) a big integer far larger than the target itself.
+function significantDigits(s) {
+  // Leading zeroes are placeholders; trailing decimal zeroes are significant.
+  // Examples: 0.01 = 1 sig fig, 0.10 = 2, 1.2 = 2.
+  const digits = s.replace('-', '').replace('.', '').replace(/^0+/, '');
+  return digits.length;
+}
 function uglyLiteral(l, target, inSum) {
   const s = fmtRat(l.n, l.d), v = Math.abs(nval(l));
-  if (s.includes('.') && s.split('.')[1].length >= 3) return true;
+  if (s.includes('.') && significantDigits(s) >= 2) return true;
   return inSum && l.d === 1 && v >= 1000 && v > 5 * Math.abs(target) + 10;
 }
 function hasFudge(x, target) {
@@ -864,7 +870,7 @@ function scoreExpression(src, target) {
   if (hit && simplified) { const r = reduceToTarget(s, target); s = r.tree; pruned = r.removed; }
   const c = cost(s);
   const fudge = hit && simplified && hasFudge(s, target);
-  return { ok: true, value: v, hit, text: show(s), cost: c, points: Math.round(c * 10), simplified, pruned, fudge };
+  return { ok: true, value: v, hit, text: show(s), cost: c, points: fudge ? Math.round(c * 5) : Math.round(c * 10), simplified, pruned, fudge };
 }
 
 // ===== Part D: rarity estimator =====
@@ -1344,7 +1350,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
         g.font = '600 26px ' + MONO; g.fillStyle = r.ok ? (r.tier === 7 ? '#FFFFFF' : CARD_TIER[r.tier]) : '#5B6676'; g.fillText(r.ok ? TIERS[r.tier][0] : 'missed', 420, y + 40);
         g.font = '600 40px ' + MONO; g.fillStyle = r.ok ? '#EDF0F5' : '#5B6676'; g.textAlign = 'right'; g.fillText(String(r.pts), W - 72, y + 42); g.textAlign = 'left';
       });
-      g.font = '400 24px ' + MONO; g.fillStyle = '#6E7A8B'; g.fillText('sevenfold-game.github.io', 72, Hh - 56);
+      g.font = '400 24px ' + MONO; g.fillStyle = '#6E7A8B'; g.fillText('seven numbers, sixty seconds.', 72, Hh - 56);
       return new Promise(function (res) { cv.toBlob(function (b) { res({ blob: b, url: cv.toDataURL('image/png') }); }, 'image/png'); });
     });
   }
@@ -1372,7 +1378,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
 
   // Preserve today's saved run when the scoring rules change. Re-score the
   // original submissions, then let the new rarity analysis assign fresh tiers.
-  var SCORE_VERSION = 2;
+  var SCORE_VERSION = 3;
   if (S.scoreVersion !== SCORE_VERSION) {
     (S.results || []).forEach(function (r) {
       if (!r || !r.ok || !r.input) return;
@@ -1599,13 +1605,13 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
     var i = S.idx, r = S.results[i], last = i === 6;
     var body;
     if (r.ok) {
-      body = '<div class="row" style="gap:14px"><div class="pts"><span id="ptsnum">' + (r.shown ? r.pts : 0) + '</span><small>points</small></div><div id="tslot"><span class="pending">calculating rarity...</span></div></div>' +
+      body = '<div class="row" style="gap:14px"><div class="pts"><span id="ptsnum">' + (r.shown ? r.pts : 0) + '</span><small>points</small></div><div id="tslot"><span class="pending">weighing rarity…</span></div></div>' +
         '<div class="muted" id="tdesc" style="min-height:24px"></div><div id="ruler"></div>' +
         '<dl class="kv"><dt>Submitted:</dt><dd class="mono small">' + esc(r.input) + '</dd><dt>Simplified:</dt><dd><div class="expr">' + esc(r.text) + '</div>' +
         (r.pruned ? '<div class="small muted" style="margin-top:6px">Redundant parts of the expression were removed.</div>' : '') +
         (r.simplified === false ? '<div class="small muted" style="margin-top:6px">Nice! Every part of this expression contributed meaningfully.</div>' : '') + '</dd></dl>';
     } else {
-      var why = r.reason === 'skip' ? 'Skipped this one.' : (r.input ? (r.miss !== undefined ? 'Time ran out sadly. The final expression resulted in ' + esc(fmtV(r.miss)) + '.' : 'Time ran out without a valid expression.') : 'Time ran out with nothing submitted.');
+      var why = r.reason === 'skip' ? 'Skipped this one.' : (r.input ? (r.miss !== undefined ? 'Time ran out sadly. The expression became ' + esc(fmtV(r.miss)) + '.' : 'Time ran out without a valid expression.') : 'Time ran out with nothing submitted.');
       body = '<div class="pts fade-in">0<small>points</small></div><p class="muted fade-in" style="margin:0">' + why + '</p>';
     }
     app.innerHTML = mast() + pips() +
@@ -1679,7 +1685,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
         '<div class="tcell">' + (r.ok ? tierPill(r.tier) : '<span class="tier" data-t="0" style="opacity:.5">missed</span>') + '</div></div>';
     }).join('');
     var squares = S.results.map(function (r) { return r.ok ? SQUARES[r.tier] : '⬛'; }).join('');
-    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' · overall: ' + TIERS[ov][0] : '') + '\n' + squares + '\nhttps://sevenfold-game.github.io';
+    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' · overall: ' + TIERS[ov][0] : '') + '\n' + squares;
     app.innerHTML = mast() + pips() +
       '<div class="card"><h2>Today\'s score</h2><div class="pts"><span id="tot">' + (fresh ? 0 : total) + '</span><small>points</small></div>' +
       '<div class="overall"><div class="lab">Overall tier</div><div id="ovslot">' + (fresh ? '' : (ov >= 0 ? tierPill(ov, true) : '')) + '</div>' +
@@ -1748,5 +1754,4 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
   else renderIntro();
 })();
 </script>
-
 </body></html>
