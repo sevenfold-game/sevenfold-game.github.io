@@ -1724,7 +1724,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
     var squares = Array.from(counts, function ([tier, count]) {
        return tier === -1 ? `⬛ no answer x${count}` : `${SQUARES[tier]} ${tiers[tier]} x${count}`;
     }).join('\n') + '\n';
-    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' - overall: ' + TIERS[ov][0] : '') + '\n' + squares + '\nhttps://sevenfold-game.github.io';
+    var text = 'Sevenfold No. ' + num + '\n' + total + ' points' + (ov >= 0 ? ' - overall: ' + TIERS[ov][0] : '') + '\n' + squares + 'Can you beat my score?\nhttps://sevenfold-game.github.io';
     app.innerHTML = mast() + pips() +
       '<div class="card"><h2>Today\'s score</h2><div class="pts"><span id="tot">' + (fresh ? 0 : total) + '</span><small>points</small></div>' +
       '<div class="overall"><div class="lab">Overall tier</div><div id="ovslot">' + (fresh ? '' : (ov >= 0 ? tierPill(ov, true) : '')) + '</div>' +
