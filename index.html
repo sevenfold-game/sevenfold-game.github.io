@@ -1336,7 +1336,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
       g.textBaseline = 'alphabetic';
       g.font = '800 66px ' + SANS; g.fillStyle = '#EDF0F5'; g.fillText('Seven', 72, 130);
       var sw = g.measureText('Seven').width; g.fillStyle = '#8C99FF'; g.fillText('fold', 72 + sw, 130);
-      g.font = '400 28px ' + MONO; g.fillStyle = '#9EA9B8'; g.textAlign = 'right'; g.fillText('No. ' + d.num + '  ·  ' + d.date, W - 72, 126); g.textAlign = 'left';
+      g.font = '400 28px ' + MONO; g.fillStyle = '#9EA9B8'; g.textAlign = 'right'; g.fillText('#' + d.num, W - 72, 126); g.textAlign = 'left';
       g.font = '600 190px ' + MONO; g.fillStyle = '#EDF0F5'; g.fillText(String(d.total), 66, 360);
       var tw = g.measureText(String(d.total)).width; g.font = '400 34px ' + MONO; g.fillStyle = '#9EA9B8'; g.fillText('points', 82 + tw, 360);
       if (d.overall >= 0) {
@@ -1481,7 +1481,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
 
   /* ---------- shared pieces ---------- */
   function mast() {
-    return '<div class="mast"><div class="brand">Seven<b>fold</b></div><div class="right"><button class="mute" id="mute" type="button" aria-pressed="' + SFX.isMuted() + '">sound ' + (SFX.isMuted() ? 'off' : 'on') + '</button><div class="issue">No. ' + date + '</div></div></div>';
+    return '<div class="mast"><div class="brand">Seven<b>fold</b></div><div class="right"><button class="mute" id="mute" type="button" aria-pressed="' + SFX.isMuted() + '">sound ' + (SFX.isMuted() ? 'off' : 'on') + '</button><div class="issue">#' + num + '</div></div></div>';
   }
   function pips() {
     var h = '<div class="pips" aria-hidden="true">';
