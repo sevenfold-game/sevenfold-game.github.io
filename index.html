@@ -1326,8 +1326,8 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
   /* ---------- share image ---------- */
   var CARD_TIER = ['#9AA5B5', '#4CC083', '#5E9BFF', '#9E80FF', '#F0BE3A', '#FF7F55', '#FF6B9E', '#FFFFFF', '#C9915A'];
   function drawShareCard(d) {
-    var W = 1080, Hh = 1350, MONO = '"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace', SANS = '"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif';
-    var fonts = (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('600 40px "JetBrains Mono"'), document.fonts.load('800 60px "Bricolage Grotesque"')]).catch(function () {}) : Promise.resolve();
+    var W = 1080, Hh = 1350, MONO = '"Intel One Mono", ui-monospace, Menlo, Consolas, monospace', SANS = '"Kanit", "Segoe UI", system-ui, sans-serif';
+    var fonts = (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('600 40px "Intel One Mono"'), document.fonts.load('800 60px "Kanit"')]).catch(function () {}) : Promise.resolve();
     return fonts.then(function () {
       var cv = document.createElement('canvas'); cv.width = W; cv.height = Hh;
       var g = cv.getContext('2d');
