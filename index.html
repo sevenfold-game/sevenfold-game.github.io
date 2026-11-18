@@ -662,7 +662,9 @@ const FN_COST = { sin: 3, cos: 3, tan: 3.5, asin: 4.5, acos: 4.5, atan: 4.5, sin
 const OP_RETURNS = [1, 0.55, 0.3, 0.18, 0.12];
 const FN_RETURNS = [1, 0.45, 0.2, 0.1];
 const FACT_RETURNS = [1, 0.4, 0.15, 0.05];
-const FN_GLOBAL_RETURNS = [1, 0.75, 0.55, 0.4, 0.3];
+// Global function diminishing returns: after enough function calls, each
+// additional function bottoms out at 4% of its base reward.
+const FN_GLOBAL_RETURNS = [1, 0.75, 0.55, 0.4, 0.3, 0.22, 0.16, 0.12, 0.09, 0.07, 0.055, 0.04];
 const CONST_RETURNS = [1, 0.35, 0.15, 0.08];
 const diminishing = (n, schedule) => schedule[Math.min(n, schedule.length - 1)];
 
@@ -1410,7 +1412,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
 
   // Preserve today's saved run when the scoring rules change. Re-score the
   // original submissions, then let the new rarity analysis assign fresh tiers.
-  var SCORE_VERSION = 3;
+  var SCORE_VERSION = 4;
   if (S.scoreVersion !== SCORE_VERSION) {
     (S.results || []).forEach(function (r) {
       if (!r || !r.ok || !r.input) return;
