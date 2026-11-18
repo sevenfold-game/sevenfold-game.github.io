@@ -769,12 +769,6 @@ function cost(x) {
 
   let total = walk(x, null);
 
-  // Penalize excessive function usage.
-  const excessFunctions = Math.max(0, state.functionTotal - 12);
-  const functionPenalty = 0.08 * Math.pow(excessFunctions, 1.35);
-   
-  total -= functionPenalty;
-
    // Excessive function usage.
    const functionPenalty = 0.12 * Math.pow(Math.max(0, state.functionTotal - 5), 1.5);
    
