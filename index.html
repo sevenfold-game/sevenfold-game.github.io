@@ -1190,7 +1190,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
     ['bro tried', 'an answer seemingly unprecedented, all ruined by one number.']
   ];
   var SQUARES = ['⬜', '🟩', '🟦', '🟪', '🟨', '🟧', '🟥', '✨', '🟫'];
-  var KEYS = ['π', 'e', 'φ', '√(', '^', '!', '(', ')', 'sin(', 'cos(', 'tan(', 'ln(', 'log(', 'abs('];
+  var KEYS = ['+', '-', '*', '/', 'π', 'e', 'φ', '√(', '^', '!', '(', ')', 'sin(', 'cos(', 'tan(', 'ln(', 'log(', 'abs('];
   var REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- the x/(x+1) curve ----------
@@ -1729,7 +1729,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
       '<div class="card"><h2>Today\'s score</h2><div class="pts"><span id="tot">' + (fresh ? 0 : total) + '</span><small>points</small></div>' +
       '<div class="overall"><div class="lab">Overall tier</div><div id="ovslot">' + (fresh ? '' : (ov >= 0 ? tierPill(ov, true) : '')) + '</div>' +
       '<div class="muted small" id="ovdesc">' + (fresh ? '' : (ov >= 0 ? TIERS[ov][1] : 'Nothing was submitted today, wow.')) + '</div></div>' +
-      '<div class="row" style="margin-top:16px"><button class="btn" id="copy">Copy text</button><button class="btn ghost" id="img">Share as image</button></div>' +
+      '<h1>Go ahead, share your results with everyone! vvv</h1><br><div class="row" style="margin-top:16px"><button class="btn" id="copy">Copy text</button><button class="btn ghost" id="img">Share as image</button></div>' +
       '<div id="sharepanel"></div></div>' +
       '<div class="card"><h2>Results</h2><div class="rows' + (fresh ? ' stag' : '') + '">' + rows + '</div></div>' +
       '<div class="card"><h2>Tier examples</h2><p class="muted small" style="margin:0 0 12px">These are some example expressions for each tier. Your own tier is highlighted for convenience.</p>' +
