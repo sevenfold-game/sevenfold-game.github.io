@@ -1451,7 +1451,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
 
   // Preserve today's saved run when the scoring rules change. Re-score the
   // original submissions, then let the new rarity analysis assign fresh tiers.
-  var SCORE_VERSION = 5;
+  var SCORE_VERSION = 6;
   if (S.scoreVersion !== SCORE_VERSION) {
     (S.results || []).forEach(function (r) {
       if (!r || !r.ok || !r.input) return;
