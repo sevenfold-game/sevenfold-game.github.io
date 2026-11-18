@@ -769,6 +769,12 @@ function cost(x) {
 
   let total = walk(x, null);
 
+  // Penalize excessive function usage.
+  const excessFunctions = Math.max(0, state.functionTotal - 12);
+  const functionPenalty = 0.08 * Math.pow(excessFunctions, 1.35);
+   
+  total -= functionPenalty;
+
   // A product of unrelated irrational constants is usually just a way to stack
   // expensive symbols. Keep the constants useful, but make a constant salad pay less.
   let penalty = 0;
@@ -813,6 +819,7 @@ function* variants(x) {
       for (const v of variants(x.e)) yield POW(x.b, v);
       break;
     case 'fn':
+      if (x.args.length === 1) yield x.args[0];
       for (let i = 0; i < x.args.length; i++) for (const v of variants(x.args[i])) { const a = x.args.slice(); a[i] = v; yield FN(x.name, a); }
       break;
   }
@@ -878,8 +885,13 @@ function scoreExpression(src, target) {
   let pruned = false;
   if (hit && simplified) { const r = reduceToTarget(s, target); s = r.tree; pruned = r.removed; }
   const c = cost(s);
+  const canonicalLength = show(s).length;
+  // Only penalize length when it becomes excessive relative to complexity.
+  const excessLength = Math.max(0, canonicalLength - 3 * c);
+  const lengthPenalty = 0.08 * Math.pow(excessLength, 1.15);
+  const finalCost = Math.max(0, c - lengthPenalty);
   const fudge = hit && simplified && hasFudge(s, target);
-  return { ok: true, value: v, hit, text: show(s), cost: c, points: fudge ? Math.round(c * 5) : Math.round(c * 10), simplified, pruned, fudge };
+  return {ok: true, value: v, hit, text: show(s), cost: finalCost, points: fudge ? Math.round(finalCost * 5) : Math.round(finalCost * 10), simplified, pruned, fudge};
 }
 
 // ===== Part D: rarity estimator =====
@@ -1412,7 +1424,7 @@ return { scoreExpression, evalOnly, newTables, analyzeTarget, findExamples, tier
 
   // Preserve today's saved run when the scoring rules change. Re-score the
   // original submissions, then let the new rarity analysis assign fresh tiers.
-  var SCORE_VERSION = 4;
+  var SCORE_VERSION = 5;
   if (S.scoreVersion !== SCORE_VERSION) {
     (S.results || []).forEach(function (r) {
       if (!r || !r.ok || !r.input) return;
